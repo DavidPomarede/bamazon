@@ -21,6 +21,11 @@ var inquirer = require('inquirer');
 var mysql = require("mysql");
 
 
+var requestedID;
+var requestedQuantity;
+
+
+
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -33,48 +38,91 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId);
-  querySongs();
+  afterConnection();
 });
 
-function searchArtist() {
+function afterConnection() {
+    connection.query("SELECT * FROM products", function(err, res) {
+      if (err) throw err;
+      for (var i = 0; i < res.length; i++) {
+        console.log(res[i].id + " | " + res[i].product_name + " | " + res[i].price);
+      }
+      console.log("-----------------------------------");
+      askCustomer();
+    });
+  };
+  
+
+
+function askCustomer() {
+
   inquirer
   .prompt([
     {
       type: "input",
-      message: "What artist do you want to search for?",
-      name: "artist"
+      message: "Please enter the ID number of the product you would like to buy: ",
+      name: "productID",
+    //   validate: function(value) {
+    //     if (isNaN(value) === false) {
+    //       return true;
+    //     }
+    //     return false;
+    //   }
     },
   ])
-  .then(function(res) {
-    var userQuery = res.artist;
-    connection.query("SELECT  topSongs.artist AS topSongs, topAlbums.artist AS topAlbums  FROM topsongs JOIN topsongs ON topsongs.artist =topAlbums.artist ", [userQuery], function(err,res) {
-      console.log(res);
-      for (var i = 0; i<res.length; i++) {
-          console.log(res[i].id + " :||  " + res[i].year + ":|| " + res[i].artist + " :||  " + res[i].song+ " :||  " +);
-      }
-    })
-  });
-  runSearch();
+  .then(function(answer1) {
+    requestedID = answer1.productID;
+    howManyUnits();
+
+});
+
 };
 
 
-function Album() {
-  inquirer
-  .prompt([
-    {
-      type: "input",
-      message: "What artist do you want to search for?",
-      name: "artist"
-    },
-  ])
-  .then(function(res) {
-    var query = "SELECT topAlbums.year, topAlbums.album, "
-    connection.query("SELECT  topSongs.artist AS ,topSongs  FROM topsongs_db WHERE artist=?", [userQuery], function(err,res) {
-      console.log(res);
-      for (var i = 0; i<res.length; i++) {
-          console.log(res[i].id + " :||  " + res[i].year + ":|| " + res[i].artist + " :||  " + res[i].song+ " :||  " +);
-      }
-    })
-  });
-  runSearch();
+function howManyUnits() {
+    inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "How many units would you like to buy?",
+        name: "unit_number",
+        // validate: function(value) {
+        //     if (isNaN(value) === false) {
+        //       return true;
+        //     }
+        //     return false;
+        //   }
+      },
+    ])
+    .then(function(answer2) {
+        console.log(answer2.unit_number);
+        connection.query("SELECT * FROM products WHERE ?", { id: requestedID }, function(err, res) {
+            if (err) throw err;
+            for (var i = 0; i < res.length; i++) {
+                if (answer2.unit_number < res[i].stock_quantity) {
+                    console.log("you will purchase one item");
+                } else {
+                    console.log("Insufficient Quantity!");
+                    connection.end();
+                }
+            }
+        });
+
+    });
 };
+
+
+
+
+// function checkHowMany(answer) {
+//     var query = "SELECT position, song, year FROM top5000 WHERE ?";
+//     connection.query(query, { id: answer.productID }, function(err, res) {
+//       if (err) throw err;
+//       for (var i = 0; i < res.length; i++) {
+//         console.log("Product: " + res[i].product_name+" Quantity: " + res[i].stock_quantity);
+//       }
+
+//       connection.end();
+//     });
+
+// };
