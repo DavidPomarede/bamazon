@@ -29,7 +29,7 @@ function runSearch() {
                 "View Low Inventory",
                 "Add to Inventory",
                 "Add New Product",
-                "exit"
+                "Exit"
             ]
         })
         .then(function(answer) {
@@ -50,7 +50,7 @@ function runSearch() {
                 addNew();
                 break;
 
-            case "exit":
+            case "Exit":
                 connection.end();
                 break;
             }
@@ -63,7 +63,7 @@ function viewProducts() {
         for (var i = 0; i < res.length; i++) {
             console.log(res[i].id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + res[i].stock_quantity + " | $" + res[i].price);
         }
-        console.log("-----------------------------------");
+        console.log("-----------------------------------\n");
         runSearch();
     });
 }
@@ -83,15 +83,15 @@ function viewLowInventory() {
     });
 }
 
-
-
 function promptAddInventory() {
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
+        console.log("\n\nID | NAME |  DEPT.  | QUANT. | PRICE");        
+        console.log("-----------------------------------");
         for (var i = 0; i < res.length; i++) {
             console.log(res[i].id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + res[i].stock_quantity + " | $" + res[i].price);
         }
-        console.log("-----------------------------------");
+        console.log("-----------------------------------\n");
     });
 
     inquirer
@@ -124,7 +124,7 @@ function promptAddInventory() {
 };
 
 function addInventory() {
-    console.log("testing2")
+
     inquirer
     .prompt([
         {
