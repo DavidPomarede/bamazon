@@ -8,8 +8,8 @@ CREATE TABLE products (
     id INTEGER(11) AUTO_INCREMENT NOT NULL,
     product_name VARCHAR(30) NOT NULL,
     department_name VARCHAR(30),
-    price INTEGER(10, 2),
-    stock_quantity INTEGER(10),
+    price DECIMAL(10, 2) NULL,
+    stock_quantity INTEGER(10) NULL,
     PRIMARY KEY (id)
 );
 

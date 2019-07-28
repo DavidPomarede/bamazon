@@ -1,20 +1,3 @@
-// Create a MySQL Database called bamazon.
-// Then create a Table inside of that database called products.
-// The products table should have each of the following columns:
-
-// item_id (unique id for each product)
-// product_name (Name of product)
-// department_name
-// price (cost to customer)
-// stock_quantity (how much of the product is available in stores)
-
-// Populate this database with around 10 different products. (i.e. Insert "mock" data rows into this database
-// and table).
-
-
-
-
-
 
 // Then create a Node application called bamazonCustomer.js. Running this application will first display 
 // all of the items available for sale. Include the ids, names, and prices of products for sale.
@@ -34,3 +17,64 @@
 // This means updating the SQL database to reflect the remaining quantity.
 // Once the update goes through, show the customer the total cost of their purchase.
 
+var inquirer = require('inquirer');
+var mysql = require("mysql");
+
+
+
+var connection = mysql.createConnection({
+  host: "localhost",
+  port: 3306,
+  user: "root",
+  password: "password",
+  database: "bamazon"
+});
+
+connection.connect(function(err) {
+  if (err) throw err;
+  console.log("connected as id " + connection.threadId);
+  querySongs();
+});
+
+function searchArtist() {
+  inquirer
+  .prompt([
+    {
+      type: "input",
+      message: "What artist do you want to search for?",
+      name: "artist"
+    },
+  ])
+  .then(function(res) {
+    var userQuery = res.artist;
+    connection.query("SELECT  topSongs.artist AS topSongs, topAlbums.artist AS topAlbums  FROM topsongs JOIN topsongs ON topsongs.artist =topAlbums.artist ", [userQuery], function(err,res) {
+      console.log(res);
+      for (var i = 0; i<res.length; i++) {
+          console.log(res[i].id + " :||  " + res[i].year + ":|| " + res[i].artist + " :||  " + res[i].song+ " :||  " +);
+      }
+    })
+  });
+  runSearch();
+};
+
+
+function Album() {
+  inquirer
+  .prompt([
+    {
+      type: "input",
+      message: "What artist do you want to search for?",
+      name: "artist"
+    },
+  ])
+  .then(function(res) {
+    var query = "SELECT topAlbums.year, topAlbums.album, "
+    connection.query("SELECT  topSongs.artist AS ,topSongs  FROM topsongs_db WHERE artist=?", [userQuery], function(err,res) {
+      console.log(res);
+      for (var i = 0; i<res.length; i++) {
+          console.log(res[i].id + " :||  " + res[i].year + ":|| " + res[i].artist + " :||  " + res[i].song+ " :||  " +);
+      }
+    })
+  });
+  runSearch();
+};
