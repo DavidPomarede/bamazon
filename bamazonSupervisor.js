@@ -56,8 +56,18 @@ function viewDepartments() {
     function(err, res) {
         if (err) throw err;
         var data = [];
+// make an array here and populate with each departent as an object, 
+// but make this a simplified SELECT * FROM search
+
+// then match category names with category names in products
+// collect the total sales in a variable,
+// then push the variables to an array
+
         for (var i = 0; i < res.length; i++) {
             var tableRow;
+
+
+
             var tableRowTotal = res[i].product_sales - res[i].over_head_costs;
             tableRow = {"id": res[i].department_id, "name": res[i].department_name, "oh": res[i].over_head_costs, "sales": res[i].product_sales, "profit": tableRowTotal};
             data.push(tableRow);
