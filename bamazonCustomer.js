@@ -79,7 +79,15 @@ function howManyUnits() {
         },
     ])
     .then(function(answer2) {
+
+        // when a customer purchases anything from the store, 
+        // the price of the product multiplied by the quantity purchased
+        // is added to the product's product_sales column.
+
         requestedQuantity = answer2.unit_number;
+
+        var productSales = res[i].stock_quantity * requestedQuantity;
+
         connection.query("SELECT * FROM products WHERE ?", { id: requestedID }, function(err, res) {
             if (err) throw err;
 
@@ -90,7 +98,8 @@ function howManyUnits() {
                         "UPDATE products SET ? WHERE ?",
                         [
                             {
-                            stock_quantity: newQuantity
+                            stock_quantity: newQuantity,
+                            // product_sales: productSales   *********
                             },
                             {
                             id: requestedID
