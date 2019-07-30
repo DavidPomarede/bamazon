@@ -81,9 +81,7 @@ function runSearch() {
 
 
 function viewDepartments() {
-    connection.query("SELECT departments.department_id, departments.department_name, departments.over_head_costs, products.product_sales " +
-        "FROM departments " +
-        "INNER JOIN products ON products.department_name = departments.department_name;", 
+    connection.query("SELECT * FROM departments", 
     function(err, res) {
         if (err) throw err;
         var data = [];
@@ -95,10 +93,14 @@ function viewDepartments() {
         for (var i = 0; i < res.length; i++) {
             var tableRow;
 
+            // department_id INTEGER(11) AUTO_INCREMENT NOT NULL,
+            // department_name VARCHAR(30) NOT NULL,
+            // over_head_costs DECIMAL(10, 2) NULL,
+            // gross_sales
 
+            var tableRowTotal = res[i].gross_sales - res[i].over_head_costs;
 
-            var tableRowTotal = res[i].product_sales - res[i].over_head_costs;
-            tableRow = {"id": res[i].department_id, "name": res[i].department_name, "oh": res[i].over_head_costs, "sales": res[i].product_sales, "profit": tableRowTotal};
+            tableRow = {"id": res[i].department_id, "name": res[i].department_name, "oh": res[i].over_head_costs, "sales": res[i].gross_sales, "profit": tableRowTotal};
             data.push(tableRow);
         }
 

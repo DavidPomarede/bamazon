@@ -26,8 +26,8 @@ CREATE TABLE departments (
 INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES ("Ball Cap", "Clothing", 40, 100), ("Trucker Hat", "Clothing", 30, 90), ("T-Shirt", "Clothing", 20, 150), ("Capri Pants", "Clothing", 28, 80), ("Computer Mouse", "Electronics", 8.95, 75),("Bobble Head", "Toys", 12.99, 30), ("Crock Pot", "Kitchen Items", 64.95, 85), ("Thermos", "Camping Equipment", 20, 120), ("Hammock", "Camping Equipment", 60, 100), ("Saxaphone", "Musical Instruments", 80, 15);
 
-INSERT INTO departments (department_name, over_head_costs)
-VALUES ("Clothing", 3000), ("Electronics", 4000), ("Toys", 2000), ("Kitchen Items", 3500), ("Camping Equipment", 3000), ("Musical Instruments", 5000);
+INSERT INTO departments (department_name, over_head_costs, gross_sales)
+VALUES ("Clothing", 3000, 0), ("Electronics", 4000, 0), ("Toys", 2000, 0), ("Kitchen Items", 3500, 0), ("Camping Equipment", 3000, 0), ("Musical Instruments", 5000, 0);
 
 
 SELECT * FROM products;
