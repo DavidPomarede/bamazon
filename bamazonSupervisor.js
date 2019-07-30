@@ -1,5 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var Table = require('easy-table');
+
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -25,14 +27,14 @@ function runSearch() {
             type: "list",
             message: "What would you like to do?",
             choices: [
-                "View Product Sales by Department",
+                "View Departments",
                 "Create New Department",
                 "Exit"
             ]
         })
         .then(function(answer) {
             switch (answer.action) {
-            case "View Product Sales by Department":
+            case "View Departments":
                 viewDepartments();
                 break;
 
@@ -50,10 +52,23 @@ function runSearch() {
 function viewDepartments() {
     connection.query("SELECT * FROM departments", function(err, res) {
         if (err) throw err;
+        var data = [];
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].id + " | " + res[i].department_name + " | " + res[i].over_head_costs);
+            var tableRow;
+            tableRow = {"id": res[i].department_id, "name": res[i].department_name, "oh": res[i].over_head_costs};
+            data.push(tableRow);
         }
-        console.log("-----------------------------------\n");
+// CREATING THE TABLE BELOW:
+        console.log("\n\n");
+        var t = new Table;
+        data.forEach(function(dept) {
+            t.cell('Dept. Id', dept.id)
+            t.cell('Dept. Name', dept.name)
+            t.cell('OH Costs', dept.oh, Table.number(2))
+            t.newRow()
+        })
+        console.log(t.toString());
+        console.log("\n\n");
         runSearch();
     });
 }
