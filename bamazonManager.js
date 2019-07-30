@@ -61,9 +61,25 @@ function runSearch() {
 function viewProducts() {
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
+        var data = [];
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + res[i].stock_quantity + " | $" + res[i].price);
-        }
+            var tableRow;
+            tableRow = {"id": res[i].id, "name": res[i].product_name, "dept": res[i].department_name, "quant": res[i].stock_quantity, "price": res[i].price};
+            data.push(tableRow);
+        };
+// CREATING THE TABLE BELOW:
+        console.log("\n\n");
+        var t = new Table;
+        data.forEach(function(product) {
+            t.cell('Product Id', product.id)
+            t.cell('Item Name', product.name)
+            t.cell('Dept. Name', product.dept)
+            t.cell('Quantity', product.quant)
+            t.cell('Price', product.price, Table.number(2))
+            t.newRow()
+        });
+        console.log(t.toString());
+        console.log("\n\n");
         console.log("-----------------------------------\n");
         runSearch();
     });
@@ -74,10 +90,10 @@ function viewLowInventory() {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
             console.log(
-                "Item: " +
+                "\nItem: " +
                 res[i].product_name +
-                "Quantity: " +
-                res[i].stock_quantity
+                "\nQuantity: " +
+                res[i].stock_quantity + "\n\n"
             );
         }
         runSearch();

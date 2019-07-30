@@ -58,6 +58,12 @@ function viewDepartments() {
             tableRow = {"id": res[i].department_id, "name": res[i].department_name, "oh": res[i].over_head_costs};
             data.push(tableRow);
         }
+
+        // SELECT departments.department_id, departments.department_name, departments.over_head_costs, products.product_sales
+        // FROM departments
+        // INNER JOIN products ON products.department_name = departments.department_name;
+
+
 // CREATING THE TABLE BELOW:
         console.log("\n\n");
         var t = new Table;

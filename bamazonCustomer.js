@@ -1,6 +1,6 @@
 var inquirer = require('inquirer');
 var mysql = require("mysql");
-
+var Table = require('easy-table');
 
 var requestedID;
 var requestedItemPrice;
@@ -24,10 +24,34 @@ connection.connect(function(err) {
 function afterConnection() {
     connection.query("SELECT * FROM products", function(err, res) {
       if (err) throw err;
+      var data = [];
       for (var i = 0; i < res.length; i++) {
-        console.log(res[i].id + " | " + res[i].product_name + " | $" + res[i].price);
+        // console.log(res[i].id + " | " + res[i].product_name + " | $" + res[i].price);
       }
       console.log("-----------------------------------");
+
+      for (var i = 0; i < res.length; i++) {
+          var tableRow;
+          tableRow = {"id": res[i].id, "name": res[i].product_name, "price": res[i].price};
+          data.push(tableRow);
+      };
+// CREATING THE TABLE BELOW:
+      console.log("\n\n");
+      var t = new Table;
+      data.forEach(function(product) {
+          t.cell('Product Id', product.id)
+          t.cell('Item Name', product.name)
+          t.cell('Price', product.price, Table.number(2))
+          t.newRow()
+      });
+      console.log(t.toString());
+      console.log("\n\n");
+      console.log("-----------------------------------\n");
+
+
+
+
+
       askCustomer();
     });
   };
@@ -86,7 +110,7 @@ function howManyUnits() {
 
         requestedQuantity = answer2.unit_number;
 
-        var productSales = res[i].stock_quantity * requestedQuantity;
+        // var productSales = res[i].stock_quantity * requestedQuantity;
 
         connection.query("SELECT * FROM products WHERE ?", { id: requestedID }, function(err, res) {
             if (err) throw err;
@@ -106,7 +130,7 @@ function howManyUnits() {
                             }
                         ],
                         function(error) {
-                            // if (error) throw err;
+                            if (error) throw err;
                             var total = requestedItemPrice * requestedQuantity;
                             console.log("You purchased " + requestedQuantity + " of these items!");
                             console.log("For a Total of $" + total + ".");
