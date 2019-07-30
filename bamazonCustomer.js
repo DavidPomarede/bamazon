@@ -117,13 +117,17 @@ function howManyUnits() {
 
             for (var i = 0; i < res.length; i++) {
                 var newQuantity = res[i].stock_quantity - requestedQuantity;
+                var checkoutTotal = res[i].price * requestedQuantity;
+                var oldSales = res[i].product_sales;
+                var newSales = oldSales + checkoutTotal;
                 if (answer2.unit_number < res[i].stock_quantity) {
+
                     connection.query(
                         "UPDATE products SET ? WHERE ?",
                         [
                             {
                             stock_quantity: newQuantity,
-                            // product_sales: productSales   *********
+                            product_sales: newSales
                             },
                             {
                             id: requestedID

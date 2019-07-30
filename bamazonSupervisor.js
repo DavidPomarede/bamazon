@@ -50,12 +50,16 @@ function runSearch() {
 }
 
 function viewDepartments() {
-    connection.query("SELECT * FROM departments", function(err, res) {
+    connection.query("SELECT departments.department_id, departments.department_name, departments.over_head_costs, products.product_sales " +
+        "FROM departments " +
+        "INNER JOIN products ON products.department_name = departments.department_name;", 
+    function(err, res) {
         if (err) throw err;
         var data = [];
         for (var i = 0; i < res.length; i++) {
             var tableRow;
-            tableRow = {"id": res[i].department_id, "name": res[i].department_name, "oh": res[i].over_head_costs};
+            var tableRowTotal = res[i].product_sales - res[i].over_head_costs;
+            tableRow = {"id": res[i].department_id, "name": res[i].department_name, "oh": res[i].over_head_costs, "sales": res[i].product_sales, "profit": tableRowTotal};
             data.push(tableRow);
         }
 
@@ -70,7 +74,9 @@ function viewDepartments() {
         data.forEach(function(dept) {
             t.cell('Dept. Id', dept.id)
             t.cell('Dept. Name', dept.name)
-            t.cell('OH Costs', dept.oh, Table.number(2))
+            t.cell('Overhead', dept.oh)
+            t.cell('Product Sales', dept.sales)
+            t.cell('Total Profit', dept.profit, Table.number(2))
             t.newRow()
         })
         console.log(t.toString());
