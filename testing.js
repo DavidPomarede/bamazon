@@ -27,19 +27,24 @@ function runSearch() {
             type: "list",
             message: "What would you like to do?",
             choices: [
-                "View Departments",
-                "Create New Department",
+                "Test1",
+                "Test2",
+                "Test3",
                 "Exit"
             ]
         })
         .then(function(answer) {
             switch (answer.action) {
-            case "View Departments":
-                viewDepartments();
+            case "Test1":
+                test1();
                 break;
 
-            case "Create New Department":
-                addNew();
+            case "Test2":
+                test2();
+                break;
+
+            case "Test3":
+                test3();
                 break;
 
             case "Exit":
@@ -50,8 +55,83 @@ function runSearch() {
 }
 
 
+var catArray = [];
+var catArray2;
+
+var prodArray = [];
+var prodArray2;
+
+function test1() {
 
 
+
+    // department_id INTEGER(11) AUTO_INCREMENT NOT NULL,
+    // department_name VARCHAR(30) NOT NULL,
+    // over_head_cost
+
+    connection.query("SELECT * FROM bamazon.departments", function(err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            catArray.push({id: res[i].department_id, name: res[i].department_name, oh: res[i].over_head_cost})
+            // console.log(JSON.stringify(catArray));
+        }
+        console.log(JSON.stringify(catArray));
+        catArray2 = JSON.stringify(catArray);
+        runSearch();
+    });
+
+}
+
+// console.log(catArray2);
+
+var deptArray = [];
+
+function test2() {
+    connection.query("SELECT * FROM departments", function(err, res) {
+        if (err) throw err;
+
+        for (var i = 0; i < res.length; i++) {
+            var idkey = res[i].department_id;
+            var idname = res[i].department_name;
+            var deptKey = {id: idkey, name: idname};
+            deptArray.push(deptKey);
+
+        }
+        console.log(JSON.stringify(deptArray));
+    });
+};
+
+
+
+
+
+// function test2() {
+//     connection.query("SELECT * FROM bamazon.products", function(err, res) {
+//         if (err) throw err;
+//         for (var i = 0; i < res.length; i++) {
+//             prodArray.push({id: res[i].department_id, name: res[i].department_name, oh: res[i].over_head_cost})
+//             // console.log(JSON.stringify(catArray));
+//         }
+//         console.log(JSON.stringify(prodArray));
+//         for (var i = 0; i < res.length; i++) {
+            
+//             if {
+
+//                 prodArray2.push(prodArray[i].department_name);
+//             }
+
+
+//             prodArray2.push(prodArray[i].department_name);
+
+
+//         }
+
+//         catArray2 = JSON.stringify(catArray);
+//         runSearch();
+
+
+//     });
+// }
 
 
 // make an array here and populate with each departent as an object, 
@@ -64,13 +144,6 @@ function runSearch() {
 //SELECT * FROM bamazon.departments;
 
 
-//     connection.query("SELECT * FROM bamazon.departments", function(err, res) {
-//         if (err) throw err;
-//         for (var i = 0; i < res.length; i++) {
-//             console.log();
-//         }
-//         runSearch();
-//     });
 
 
 
@@ -79,8 +152,10 @@ function runSearch() {
 
 
 
+var salesByDept = [];
+var salesByDept2 = [];
 
-function viewDepartments() {
+function test3() {
     connection.query("SELECT departments.department_id, departments.department_name, departments.over_head_costs, products.product_sales " +
         "FROM departments " +
         "INNER JOIN products ON products.department_name = departments.department_name;", 
@@ -88,72 +163,85 @@ function viewDepartments() {
         if (err) throw err;
         var data = [];
 
-
-
-
-
         for (var i = 0; i < res.length; i++) {
             var tableRow;
-
-
-
-            var tableRowTotal = res[i].product_sales - res[i].over_head_costs;
-            tableRow = {"id": res[i].department_id, "name": res[i].department_name, "oh": res[i].over_head_costs, "sales": res[i].product_sales, "profit": tableRowTotal};
+            tableRow = {"id": res[i].department_id, "name": res[i].department_name, "oh": res[i].over_head_costs, "sales": res[i].product_sales};
             data.push(tableRow);
         }
+        console.log(data);
 
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].sales >0) {
+                console.log("testing! " + data[i].sales);
+                salesByDept.push({id: data[i].department_id, name: data[i].department_name, sales: data[i].sales})
+            }
+        }
+
+/////************** */
+        var tempSalesArray;
+        var tempTotal = 0;
+        var categoryCount = 1;
+
+        for (var i = 0; i < salesByDept.length; i++) {
+
+            if (salesByDept[i].id === categoryCount) {
+                tempTotal += paresInt(salesByDept[i].sales);
+                categoryCount++;
+            }
+
+        }
+        
         // SELECT departments.department_id, departments.department_name, departments.over_head_costs, products.product_sales
         // FROM departments
         // INNER JOIN products ON products.department_name = departments.department_name;
 
-
 // CREATING THE TABLE BELOW:
-        console.log("\n\n");
-        var t = new Table;
-        data.forEach(function(dept) {
-            t.cell('Dept. Id', dept.id)
-            t.cell('Dept. Name', dept.name)
-            t.cell('Overhead', dept.oh)
-            t.cell('Product Sales', dept.sales)
-            t.cell('Total Profit', dept.profit, Table.number(2))
-            t.newRow()
-        })
-        console.log(t.toString());
-        console.log("\n\n");
+//         console.log("\n\n");
+//         var t = new Table;
+//         data.forEach(function(dept) {
+//             t.cell('Dept. Id', dept.id)
+//             t.cell('Dept. Name', dept.name)
+//             t.cell('Overhead', dept.oh)
+//             t.cell('Product Sales', dept.sales)
+//             t.cell('Total Profit', dept.profit, Table.number(2))
+//             t.newRow()
+//         })
+//         console.log(t.toString());
+//         console.log("\n\n");
         runSearch();
     });
 }
 
 
-function addNew() {
-    inquirer
-        .prompt([
-        {
-            name: "department_name",
-            type: "input",
-            message: "What is the name of the new department you would like to add?"
-        },
-        {
-            name: "over_head_costs",
-            type: "input",
-            message: "How much are overhead costs for this department?"
-        }
-        ])
-        .then(function(answer) {
-            connection.query(
-            "INSERT INTO departments SET ?",
-            {
-                department_name: answer.department_name,
-                over_head_costs: answer.over_head_costs
-            },
-            function(err) {
-                if (err) throw err;
-                console.log("Your department listing was created successfully!");
-                runSearch();
-            }
-            );
-        });
-};
+// function addNew() {
+//     inquirer
+//         .prompt([
+//         {
+//             name: "department_name",
+//             type: "input",
+//             message: "What is the name of the new department you would like to add?"
+//         },
+//         {
+//             name: "over_head_costs",
+//             type: "input",
+//             message: "How much are overhead costs for this department?"
+//         }
+//         ])
+//         .then(function(answer) {
+//             connection.query(
+//             "INSERT INTO departments SET ?",
+//             {
+//                 department_name: answer.department_name,
+//                 over_head_costs: answer.over_head_costs
+//             },
+//             function(err) {
+//                 if (err) throw err;
+//                 console.log("Your department listing was created successfully!");
+//                 runSearch();
+//             }
+//             );
+//         });
+// };
 
 
 
