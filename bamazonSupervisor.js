@@ -159,7 +159,8 @@ function addNew() {
             "INSERT INTO departments SET ?",
             {
                 department_name: answer.department_name,
-                over_head_costs: answer.over_head_costs
+                over_head_costs: answer.over_head_costs,
+		gross_sales: 0
             },
             function(err) {
                 if (err) throw err;
