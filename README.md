@@ -19,7 +19,7 @@ _The Customer Portal:_
 ![](images/customer1.png?raw=true)
 
 
-#### This portal is simple: customers are prompted directly as to what kind of item they want, they enter the ID number of the item, then the quantity, and the quantity of the item is reduced, the purchase total is calculated, and added to the gross profits of that Department category.
+#### This portal is simple: customers are prompted directly as to what kind of item they want, they enter the ID number of the item, then the quantity. The stock quantity of the item is reduced, the purchase total is calculated, and added to the gross profits of that Department category.
 
 
 _The Manager Portal:_
