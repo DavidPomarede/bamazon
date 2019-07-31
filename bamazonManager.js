@@ -14,6 +14,22 @@ var requestedID;
 var requestedQuantity;
 var addedQuantity;
 
+console.log("\n\n                        W E L C O M E   T O                                     ");
+console.log("                                                                                ");
+console.log(":::::::::      :::     ::::    ::::      :::     ::::::::: ::::::::  ::::    :::");
+console.log(":+:    :+:   :+: :+:   +:+:+: :+:+:+   :+: :+:        :+: :+:    :+: :+:+:   :+:");
+console.log("+:+    +:+  +:+   +:+  +:+ +:+:+ +:+  +:+   +:+      +:+  +:+    +:+ :+:+:+  +:+");
+console.log("+#++:++#+  +#++:++#++: +#+  +:+  +#+ +#++:++#++:    +#+   +#+    +:+ +#+ +:+ +#+");
+console.log("+#+    +#+ +#+     +#+ +#+       +#+ +#+     +#+   +#+    +#+    +#+ +#+  +#+#+#");
+console.log("#+#    #+# #+#     #+# #+#       #+# #+#     #+#  #+#     #+#    #+# #+#   #+#+#");
+console.log("#########  ###     ### ###       ### ###     ### ######### ########  ###    ####");
+console.log("                                                                                ");
+console.log("                        M A N A G E R   P O R T A L                           \n\n");
+
+
+
+
+
 connection.connect(function(err) {
     if (err) throw err;
     runSearch();
@@ -88,14 +104,34 @@ function viewProducts() {
 function viewLowInventory() {
     connection.query("SELECT * FROM products WHERE stock_quantity <= 5", function(err, res) {
         if (err) throw err;
+        // for (var i = 0; i < res.length; i++) {
+        //     console.log(
+        //         "\nItem: " +
+        //         res[i].product_name +
+        //         "\nQuantity: " +
+        //         res[i].stock_quantity + "\n\n"
+        //     );
+        // }
+
+        var data = [];
         for (var i = 0; i < res.length; i++) {
-            console.log(
-                "\nItem: " +
-                res[i].product_name +
-                "\nQuantity: " +
-                res[i].stock_quantity + "\n\n"
-            );
-        }
+            var tableRow;
+            tableRow = {"id": res[i].id, "name": res[i].product_name, "dept": res[i].department_name, "quant": res[i].stock_quantity, "price": res[i].price};
+            data.push(tableRow);
+        };
+// CREATING THE TABLE BELOW:
+        console.log("\n\n");
+        var t = new Table;
+        data.forEach(function(product) {
+            t.cell('Product Id', product.id)
+            t.cell('Item Name', product.name)
+            t.cell('Dept. Name', product.dept)
+            t.cell('Quantity', product.quant)
+            t.cell('Price', product.price, Table.number(2))
+            t.newRow()
+        });
+        console.log(t.toString());
+
         runSearch();
     });
 }
@@ -103,11 +139,26 @@ function viewLowInventory() {
 function promptAddInventory() {
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
-        console.log("\n\nID | NAME |  DEPT.  | QUANT. | PRICE");        
-        console.log("-----------------------------------");
+
+        var data = [];
         for (var i = 0; i < res.length; i++) {
-            console.log(res[i].id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + res[i].stock_quantity + " | $" + res[i].price);
-        }
+            var tableRow;
+            tableRow = {"id": res[i].id, "name": res[i].product_name, "dept": res[i].department_name, "quant": res[i].stock_quantity, "price": res[i].price};
+            data.push(tableRow);
+        };
+// CREATING THE TABLE BELOW:
+        console.log("\n\n");
+        var t = new Table;
+        data.forEach(function(product) {
+            t.cell('Product Id', product.id)
+            t.cell('Item Name', product.name)
+            t.cell('Dept. Name', product.dept)
+            t.cell('Quantity', product.quant)
+            t.cell('Price', product.price, Table.number(2))
+            t.newRow()
+        });
+        console.log(t.toString());
+
         console.log("-----------------------------------\n");
     });
 

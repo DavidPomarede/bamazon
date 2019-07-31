@@ -15,6 +15,19 @@ var requestedID;
 var requestedQuantity;
 var addedQuantity;
 
+console.log("\n\n                        W E L C O M E   T O                                     ");
+console.log("                                                                                ");
+console.log(":::::::::      :::     ::::    ::::      :::     ::::::::: ::::::::  ::::    :::");
+console.log(":+:    :+:   :+: :+:   +:+:+: :+:+:+   :+: :+:        :+: :+:    :+: :+:+:   :+:");
+console.log("+:+    +:+  +:+   +:+  +:+ +:+:+ +:+  +:+   +:+      +:+  +:+    +:+ :+:+:+  +:+");
+console.log("+#++:++#+  +#++:++#++: +#+  +:+  +#+ +#++:++#++:    +#+   +#+    +:+ +#+ +:+ +#+");
+console.log("+#+    +#+ +#+     +#+ +#+       +#+ +#+     +#+   +#+    +#+    +#+ +#+  +#+#+#");
+console.log("#+#    #+# #+#     #+# #+#       #+# #+#     #+#  #+#     #+#    #+# #+#   #+#+#");
+console.log("#########  ###     ### ###       ### ###     ### ######### ########  ###    ####");
+console.log("                                                                                ");
+console.log("                        S U P E R V I S O R   P O R T A L                           \n\n");
+
+
 connection.connect(function(err) {
     if (err) throw err;
     runSearch();
